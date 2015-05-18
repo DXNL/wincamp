@@ -1,0 +1,262 @@
+﻿<local:BasePage x:Name="pageRoot"
+    x:Class="MovieWatchr.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MovieWatchr.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:MovieWatchr.Data"
+    xmlns:model="using:MovieWatchr.Models"
+    mc:Ignorable="d"
+    d:DataContext="{x:Bind ViewModel}">
+
+    <local:BasePage.Resources>
+        <CollectionViewSource x:Name="MoviesViewSource" Source="{x:Bind ViewModel.Movies, Mode=OneWay}"
+                              d:Source="{Binding Movies, Source={d:DesignData Source=Data/StaticData.json, Type=data:StaticDataSource}}"/>
+    </local:BasePage.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Full">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1366" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MovieSearchBox.Visibility" Value="Visible" />
+                        <Setter Target="HeaderButtons.Visibility" Value="Collapsed" />
+                        <Setter Target="DetailGridColumn.Width" Value="2*" />
+                        <Setter Target="MasterListView.IsItemClickEnabled" Value="False" />
+                        <Setter Target="MasterListView.SelectionMode" Value="Single" />
+                        <Setter Target="BackButton.Visibility" Value="Collapsed" />
+                        <Setter Target="PinMovieAppBarButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MoviePoster.Height" Value="360" />
+                        <Setter Target="MoviePoster.Width" Value="240" />
+                        <Setter Target="MovieTitle.FontSize" Value="40" />
+                        <Setter Target="MovieTagline.FontSize" Value="24" />
+                        <Setter Target="MovieOverview.(RelativePanel.RightOf)" Value="MoviePoster" />
+                        <Setter Target="MovieOverview.(RelativePanel.Below)" Value="MovieBasicInfo" />
+                        <Setter Target="RatingContainer.(RelativePanel.Below)" Value="MoviePoster" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Medium">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1024" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MovieSearchBox.Visibility" Value="Visible" />
+                        <Setter Target="HeaderButtons.Visibility" Value="Collapsed" />
+                        <Setter Target="DetailGridColumn.Width" Value="1.5*" />
+                        <Setter Target="MasterListView.IsItemClickEnabled" Value="False" />
+                        <Setter Target="MasterListView.SelectionMode" Value="Single" />
+                        <Setter Target="BackButton.Visibility" Value="Collapsed" />
+                        <Setter Target="PinMovieAppBarButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MoviePoster.Height" Value="300" />
+                        <Setter Target="MoviePoster.Width" Value="200" />
+                        <Setter Target="MovieTitle.FontSize" Value="36" />
+                        <Setter Target="MovieTagline.FontSize" Value="24" />
+                        <Setter Target="MovieOverview.(RelativePanel.RightOf)" Value="MoviePoster" />
+                        <Setter Target="MovieOverview.(RelativePanel.Below)" Value="MovieBasicInfo" />
+                        <Setter Target="RatingContainer.(RelativePanel.Below)" Value="MoviePoster" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MovieSearchBox.Visibility" Value="Collapsed" />
+                        <Setter Target="HeaderButtons.Visibility" Value="Visible" />
+                        <Setter Target="DetailGridColumn.Width" Value="0" />
+                        <Setter Target="MasterListView.IsItemClickEnabled" Value="True" />
+                        <Setter Target="MasterListView.SelectionMode" Value="None" />
+                        <Setter Target="TopAppBar.Visibility" Value="Collapsed" />
+                        <Setter Target="PinMovieAppBarButton.Visibility" Value="Visible" />
+                        <Setter Target="MoviePoster.Height" Value="150" />
+                        <Setter Target="MoviePoster.Width" Value="100" />
+                        <Setter Target="MovieTitle.FontSize" Value="28" />
+                        <Setter Target="MovieTagline.FontSize" Value="16" />
+                        <Setter Target="MovieOverview.(RelativePanel.RightOf)" Value="" />
+                        <Setter Target="MovieOverview.(RelativePanel.Below)" Value="MoviePoster" />
+                        <Setter Target="RatingContainer.(RelativePanel.Below)" Value="MovieOverview" />
+                        <Setter Target="NewMovieHeader.Visibility" Value="Visible" />
+                        <Setter Target="AddMovieFlyout.Placement" Value="Full" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="{StaticResource HeaderBackgroundBrush}" RequestedTheme="Dark">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="HeaderText" Grid.Column="0" Text="my movies" FontSize="30" FontWeight="ExtraLight" Margin="12,0,0,8" />
+
+            <CommandBar x:Name="TopAppBar" Grid.Column="1" Background="{StaticResource HeaderBackgroundBrush}" Margin="0,0,8,0">
+                <CommandBar.PrimaryCommands>
+                    <AppBarButton Icon="Pin" Label="pin to start" Visibility="{x:Bind ViewModel.SelectedMovie, Converter={StaticResource ObjectToVisibilityConverter}, Mode=OneWay}" />
+                    <AppBarButton Icon="Setting" Label="settings" />
+                </CommandBar.PrimaryCommands>
+            </CommandBar>
+
+            <SearchBox x:Name="MovieSearchBox" Grid.Column="2" PlaceholderText="Search Movies" MinWidth="200" Margin="0,8,4,8" />
+            <StackPanel x:Name="HeaderButtons" Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
+                <AppBarButton Icon="Setting" Height="48" Width="48" />
+                <AppBarButton Icon="Find" Height="48" Width="48" />
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="ContentRoot" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="MasterListViewColumn" Width="*" />
+                <ColumnDefinition x:Name="DetailGridColumn" Width="1.5*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Master List -->
+            <Grid x:Name="MasterListGrid" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ListView x:Name="MasterListView" Grid.Row="0" ItemsSource="{Binding Source={StaticResource MoviesViewSource}}" SelectionMode="Single"
+                          SelectionChanged="MasterListView_SelectionChanged" ItemClick="MasterListView_ItemClick">
+                    <ListView.Header>
+                        <StackPanel Orientation="Horizontal" Margin="12,0,0,4">
+                            <TextBlock Text="sorted by" Foreground="{StaticResource ForegroundBrush}" VerticalAlignment="Center" Margin="0,0,4,0" />
+                            <Button Content="name" VerticalAlignment="Center" RequestedTheme="Light" Foreground="{StaticResource AccentBrush}" Padding="0,4" Style="{StaticResource SortButtonStyle}">
+                                <Button.Flyout>
+                                    <MenuFlyout Placement="Bottom">
+                                        <MenuFlyoutItem Text="name" />
+                                        <MenuFlyoutItem Text="rating" />
+                                        <MenuFlyoutItem Text="watched" />
+                                    </MenuFlyout>
+                                </Button.Flyout>
+                            </Button>
+                        </StackPanel>
+                    </ListView.Header>
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Margin" Value="0,0,0,12" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Movie">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Rectangle Grid.Column="0" Fill="{StaticResource AccentBrush}" Width="75" Height="75" />
+                                <Image Grid.Column="0" Source="{Binding PosterPath, Converter={StaticResource PosterPathToImageUrlConverter}}" Width="75" Height="75" Stretch="UniformToFill" />
+
+                                <Grid Grid.Column="0" Visibility="{x:Bind IsWatched, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Rectangle Fill="{StaticResource HeaderBackgroundBrush}" Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                    <Viewbox Width="16" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4">
+                                        <SymbolIcon Symbol="View" />
+                                    </Viewbox>
+                                </Grid>
+
+                                <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                    <TextBlock Text="{x:Bind Title, TargetNullValue='-'}" Foreground="{StaticResource ForegroundBrush}" FontSize="24" FontWeight="Light" TextTrimming="CharacterEllipsis" Margin="0,-4,0,0" />
+                                    <TextBlock Text="{x:Bind ReleaseDate, TargetNullValue='-'}" Foreground="{StaticResource ForegroundBrush}" Opacity="0.6" FontSize="16" FontWeight="Light" TextTrimming="CharacterEllipsis" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{x:Bind Rating, TargetNullValue='0'}" Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center" Margin="0,0,4,0" />
+                                        <SymbolIcon Symbol="Favorite" Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center"  Margin="0,0,4,0" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <CommandBar Grid.Row="1" Background="{StaticResource FooterBackgroundBrush}">
+                    <CommandBar.PrimaryCommands>
+                        <AppBarButton x:Name="AddAppBarButton" Icon="Add" Label="add movie">
+                            <AppBarButton.Flyout>
+                                <Flyout x:Name="AddMovieFlyout" Placement="Top">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock x:Name="NewMovieHeader" Text="Add a new movie" Grid.Row="0" Style="{StaticResource SubheaderTextBlockStyle}" Foreground="{StaticResource ForegroundBrush}" Visibility="Collapsed" />
+                                        <TextBox x:Name="NewMovieTextBox" Grid.Row="1" PlaceholderText="Enter the movie title" MinWidth="200" Margin="0,10" />
+                                        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Right" Click="AddMovieButton_Click" VerticalAlignment="Top" />
+                                    </Grid>
+                                </Flyout>
+                            </AppBarButton.Flyout>
+                        </AppBarButton>
+                        <AppBarButton x:Name="DeleteMultiAppBarButton" Icon="Delete" Label="delete selected" Visibility="Collapsed" />
+                        <AppBarButton x:Name="SelectAppBarButton" Icon="Bullets" Label="select movies" Click="SelectAppBarButton_Click" />
+                    </CommandBar.PrimaryCommands>
+                </CommandBar>
+            </Grid>
+
+            <!-- Detail view -->
+            <Grid x:Name="DetailGrid" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ScrollViewer Grid.Row="0" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" Visibility="{x:Bind ViewModel.SelectedMovie, Converter={StaticResource ObjectToVisibilityConverter}, Mode=OneWay}">
+                    <Grid x:Name="MovieDetailsGrid" Margin="12" RequestedTheme="Light">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <RelativePanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Image x:Name="MoviePoster" DataContext="{x:Bind ViewModel.SelectedMovie, Mode=OneWay}" Source="{Binding PosterPath, Converter={StaticResource PosterPathToImageUrlConverter}, ConverterParameter=w185}" Stretch="UniformToFill" Height="150" Width="100" VerticalAlignment="Top" Margin="0,0,20,16" />
+
+                            <StackPanel x:Name="MovieBasicInfo" RelativePanel.RightOf="MoviePoster">
+                                <TextBlock x:Name="MovieTitle" Text="{x:Bind ViewModel.SelectedMovie.Title, Mode=OneWay, TargetNullValue='-'}" FontWeight="Light" FontSize="48" Foreground="{StaticResource ForegroundBrush}" TextWrapping="WrapWholeWords" />
+                                <TextBlock x:Name="MovieTagline" RelativePanel.Below="MovieTitle" Text="{x:Bind ViewModel.SelectedMovie.Tagline, Mode=OneWay, TargetNullValue='-'}" FontWeight="Light" FontSize="24" Foreground="{StaticResource ForegroundBrush}" TextWrapping="WrapWholeWords" />
+                            </StackPanel>
+
+                            <TextBlock x:Name="MovieOverview" Text="{x:Bind ViewModel.SelectedMovie.Overview, Mode=OneWay, TargetNullValue='-'}" TextWrapping="WrapWholeWords" RelativePanel.Below="MoviePoster" RelativePanel.RightOf="" Foreground="{StaticResource ForegroundBrush}" Margin="0,8,0,16" />
+
+                            <StackPanel x:Name="RatingContainer" Orientation="Horizontal" RelativePanel.Below="MovieOverview">
+                                <TextBlock Foreground="{StaticResource ForegroundBrush}" Margin="0,0,4,0">
+                                    <Run Text="Rating:" />
+                                    <Run x:Name="RatingTextBlock" Foreground="{StaticResource AccentBrush}" Text="{x:Bind RatingSlider.Value, Mode=OneWay, TargetNullValue='0'}" />
+                                </TextBlock>
+                                <SymbolIcon Symbol="Favorite" Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center"  Margin="0,0,4,0" />
+                            </StackPanel>
+                            <Slider x:Name="RatingSlider" Minimum="0" Maximum="5" TickFrequency="1" SnapsTo="Ticks" Value="{x:Bind ViewModel.SelectedMovie.Rating, Mode=OneWay, TargetNullValue='0'}" RelativePanel.Below="RatingContainer" Width="150" Margin="0,0,0,16" />
+
+                            <ToggleSwitch x:Name="IsWatchedCheckbox" IsOn="{x:Bind ViewModel.SelectedMovie.IsWatched, Mode=OneWay, TargetNullValue='False'}" OnContent="Yes" OffContent="No" RelativePanel.Below="RatingSlider">
+                                <ToggleSwitch.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="Watched" Foreground="{StaticResource ForegroundBrush}" />
+                                    </DataTemplate>
+                                </ToggleSwitch.HeaderTemplate>
+                            </ToggleSwitch>
+                        </RelativePanel>
+                    </Grid>
+                </ScrollViewer>
+
+                <CommandBar Grid.Row="1" Background="{StaticResource FooterBackgroundBrush}" Visibility="{x:Bind ViewModel.SelectedMovie, Converter={StaticResource ObjectToVisibilityConverter}, Mode=OneWay}">
+                    <CommandBar.PrimaryCommands>
+                        <AppBarButton x:Name="PinMovieAppBarButton" Icon="Pin" Label="pin to start" />
+                        <AppBarButton x:Name="DeleteAppBarButton" Icon="Delete" Label="delete movie" />
+                    </CommandBar.PrimaryCommands>
+                </CommandBar>
+            </Grid>
+        </Grid>
+    </Grid>
+</local:BasePage>
