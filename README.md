@@ -55,7 +55,7 @@ http://channel9.msdn.com/Events/Build/2015/2-768
 Data Binding: Boost Your App’s Performance Through New Enhancements to XAML Data Binding
 http://channel9.msdn.com/Events/Build/2015/3-635 
 
-Cross-platform app development
+### Cross-platform app development
 Strategies for Developing Cross-Platform Applications with Visual Studio 2015
 http://channel9.msdn.com/Events/Build/2015/2-627 
 
