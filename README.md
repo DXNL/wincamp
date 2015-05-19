@@ -1,10 +1,4 @@
-# DX NL Windows Camps
-
-Windows 10 DevCamp Resources
-
-## Camp content
-Hands-on Labs, presentaties en resources
-https://github.com/DXNL/wincamp
+# Windows 10 DevCamp Resources
 
 ## Microsoft Virtual Academy
 A Developer's Guide to Windows 10 Preview
