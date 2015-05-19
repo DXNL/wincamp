@@ -50,6 +50,9 @@ Data Binding: Boost Your App’s Performance Through New Enhancements to XAML Da
 http://channel9.msdn.com/Events/Build/2015/3-635 
 
 ### Cross-platform app development
+Universal Windows Platform Bridges
+https://dev.windows.com/en-US/uwp-bridges/
+
 Strategies for Developing Cross-Platform Applications with Visual Studio 2015
 http://channel9.msdn.com/Events/Build/2015/2-627 
 
